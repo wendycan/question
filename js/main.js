@@ -6,11 +6,11 @@ window.toLetters = function(num) {
 }
 var Question = React.createClass({
   render: function() {
-    var rawMarkup = this.props.children.toString();
     return (
       <div className="question">
         <p>{ this.props.title }</p>
-        <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
+        <OptionsList options={this.props.options} selected={this.props.answer.index} ></OptionsList>
+        <p> { this.props.answer.desc} </p>
       </div>
     );
   }
@@ -18,14 +18,19 @@ var Question = React.createClass({
 var OptionForm = React.createClass({
   handleOptionSubmit: function() {
     var option = React.findDOMNode(this.refs.option).value.trim();
+    if (!option) return;
     this.props.onOptionSubmit({option: option});
     React.findDOMNode(this.refs.option).value = '';
   },
   render: function() {
     return (
-      <div>
-        <input type="text" className="form-option" placeholder="Option" ref="option" />
-        <div className="btn btn-default" id="create-option" onClick={this.handleOptionSubmit}>添加</div>
+      <div className="row">
+        <div className="col-md-11">
+          <input type="text" className="form-control" placeholder="Option" ref="option" />
+        </div>
+        <div className="col-md-1">
+          <div className="btn btn-default" id="create-option" onClick={this.handleOptionSubmit}>添加</div>
+        </div>
       </div>
     );
   }
@@ -37,23 +42,21 @@ var QuestionForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var title = React.findDOMNode(this.refs.title).value.trim();
-    var answer = React.findDOMNode(this.refs.answer).value.trim();
+    var answer = {
+      desc: React.findDOMNode(this.refs.answer).value.trim(),
+      index: $('.optionsList .active').data('id')
+    };
     if (!title || !answer) {
       return;
     }
-    this.props.onQuestionSubmit({title: title, answer: answer});
+
+    this.props.onQuestionSubmit({title: title, answer: answer, options: this.state.options});
     $('#question-form').empty();
   },
   handleOptionSubmit: function(option) {
     var options = this.state.options;
     options.push(option);
     this.setState({options: options});
-  },
-  addOption: function() {
-    React.render(
-      <OptionForm onOptionSubmit={this.handleOptionSubmit}/>,
-      document.getElementById('question-options')
-    );
   },
   render: function() {
     return (
@@ -64,20 +67,8 @@ var QuestionForm = React.createClass({
         </div>
         <div className="form-group">
           <label>选项</label>
-          <button className="btn btn-default" onClick={this.addOption}>添加</button>
-          <div id="question-options"></div>
+          <OptionForm onOptionSubmit={this.handleOptionSubmit}/>
           <Options options={this.state.options}></Options>
-        </div>
-
-        <div className="form-group">
-          <label className="checkbox-inline">
-            <input type="checkbox" id="inlineCheckbox1" value="option1" /> 1
-          </label>
-          <label className="checkbox-inline">
-            <input type="checkbox" id="inlineCheckbox1" value="option1" /> 2
-          </label><label className="checkbox-inline">
-            <input type="checkbox" id="inlineCheckbox1" value="option1" /> 3
-          </label>
         </div>
         <div className="form-group">
           <label>答案</label>
@@ -89,15 +80,35 @@ var QuestionForm = React.createClass({
   }
 });
 var Options = React.createClass({
+  selectOption: function(e) {
+    $(e.target).addClass('active').siblings().removeClass('active');
+  },
   render: function() {
     var optionsNodes = this.props.options.map(function(option, index) {
-      console.log(index);
       return (
-        <div title={option.title} key={index}>
-          {toLetters(index + 1)} {option.option}
-        </div>
+        <p data-title={option.option} data-id={index} key={index} onClick={this.selectOption}>{toLetters(index + 1)+ '.' + option.option}</p>
       );
-    });
+    }.bind(this));//to pass this to function
+    return (
+      <div className="optionsList">
+        {optionsNodes}
+      </div>
+    )
+  }
+});
+var OptionsList = React.createClass({
+  render: function() {
+    var optionsNodes = this.props.options.map(function(option, index) {
+      if (index === this.props.selected) {
+        return (
+          <p key={index} className="active">{toLetters(index + 1)+ '.' + option.option}</p>
+        );
+      } else {
+        return (
+          <p key={index}>{toLetters(index + 1)+ '.' + option.option}</p>
+        );        
+      }
+    }.bind(this));
     return (
       <div className="optionsList">
         {optionsNodes}
@@ -109,8 +120,7 @@ var Questions = React.createClass({
   render: function() {
     var questionNodes = this.props.data.map(function(question, index) {
       return (
-        <Question title={question.title} key={index}>
-          {question.answer}
+        <Question title={question.title} options={question.options} answer={question.answer} key={index}>
         </Question>
       );
     });
@@ -129,7 +139,6 @@ var ContentBox = React.createClass({
     var questions = this.state.data;
     questions.push(question);
     this.setState({data: questions});
-    console.log(this.state.data);
   },
   newQuestion: function(){
     React.render(
