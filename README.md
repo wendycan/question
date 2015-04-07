@@ -4,18 +4,23 @@
 
 * Npm
 * Bower
+* react-tools
+
+``` sh
+$ npm install bower -g
+$ npm install react-tools -g
+```
 
 ## Install
 
 ``` sh
 $ bower install
-$ npm install
 ```
 
 ## Run
 
 ``` sh
-$ grunt watch
+$ jsx --watch src/ build/ 
 $ python -m SimpleHTTPServer
 ```
 
