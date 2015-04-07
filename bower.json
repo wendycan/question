@@ -1,0 +1,9 @@
+{
+  "name": "question",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "~0.13.1",
+    "bootstrap": "~3.3.4"
+  },
+  "private": true
+}
