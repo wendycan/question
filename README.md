@@ -20,7 +20,7 @@ $ bower install
 ## Run
 
 ``` sh
-$ jsx --watch src/ build/ 
+$ jsx --watch js/ build/ 
 $ python -m SimpleHTTPServer
 ```
 
