@@ -20,13 +20,20 @@ var QuestionForm = React.createClass({displayName: "QuestionForm",
     this.props.onQuestionSubmit({title: title, answer: answer});
     React.findDOMNode(this.refs.title).value = '';
     React.findDOMNode(this.refs.answer).value = '';
+    $('#question-form').empty();
   },
   render: function() {
     return (
       React.createElement("form", {className: "questionForm", onSubmit: this.handleSubmit}, 
-        React.createElement("input", {type: "text", placeholder: "Title", ref: "title"}), 
-        React.createElement("input", {type: "text", placeholder: "answer", ref: "answer"}), 
-        React.createElement("input", {type: "submit", value: "添加"})
+        React.createElement("div", {class: "form-group"}, 
+          React.createElement("label", null, "问题"), 
+          React.createElement("input", {type: "text", className: "form-control", placeholder: "Title", ref: "title"})
+        ), 
+        React.createElement("div", {class: "form-group"}, 
+          React.createElement("label", null, "答案"), 
+          React.createElement("input", {type: "text", className: "form-control", placeholder: "Answer", ref: "answer"})
+        ), 
+        React.createElement("button", {type: "submit", className: "btn btn-default"}, "添加")
       )
     );
   }
@@ -68,7 +75,7 @@ var ContentBox = React.createClass({displayName: "ContentBox",
   },
   render: function() {
     return (React.createElement("div", {className: "question-box"}, 
-      React.createElement("button", {onClick: this.newQuestion}, "Add Question"), 
+      React.createElement("div", {className: "btn btn-default", onClick: this.newQuestion}, "Add Question"), 
       React.createElement("div", {id: "question-form"}), 
       React.createElement(Questions, {data: this.state.data})
     )

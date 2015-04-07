@@ -20,13 +20,20 @@ var QuestionForm = React.createClass({
     this.props.onQuestionSubmit({title: title, answer: answer});
     React.findDOMNode(this.refs.title).value = '';
     React.findDOMNode(this.refs.answer).value = '';
+    $('#question-form').empty();
   },
   render: function() {
     return (
       <form className="questionForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Title" ref="title" />
-        <input type="text" placeholder="answer" ref="answer" />
-        <input type="submit" value="添加" />
+        <div class="form-group">
+          <label>问题</label>
+          <input type="text" className="form-control" placeholder="Title" ref="title" />
+        </div>
+        <div class="form-group">
+          <label>答案</label>
+          <input type="text" className="form-control" placeholder="Answer" ref="answer" />
+        </div>
+        <button type="submit" className="btn btn-default">添加</button>
       </form>
     );
   }
@@ -68,7 +75,7 @@ var ContentBox = React.createClass({
   },
   render: function() {
     return (<div className="question-box">
-      <button onClick={this.newQuestion}>Add Question</button>
+      <div className="btn btn-default" onClick={this.newQuestion}>Add Question</div>
       <div id="question-form"></div>
       <Questions data={this.state.data} />
     </div>
