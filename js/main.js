@@ -281,7 +281,7 @@ jQuery(function($) {
       return (<div className="question-box">
         <div className="row top-buttons">
           <div className="col-md-1">
-            <div className="btn btn-default" onClick={this.editPage}>编辑页面</div>
+            <div className="btn btn-default" onClick={this.editPage}>页面信息</div>
           </div>
           <div className="col-md-1">
             <div className="btn btn-default" onClick={this.newQuestion}>添加问题</div>

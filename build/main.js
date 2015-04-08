@@ -281,7 +281,7 @@ jQuery(function($) {
       return (React.createElement("div", {className: "question-box"}, 
         React.createElement("div", {className: "row top-buttons"}, 
           React.createElement("div", {className: "col-md-1"}, 
-            React.createElement("div", {className: "btn btn-default", onClick: this.editPage}, "编辑页面")
+            React.createElement("div", {className: "btn btn-default", onClick: this.editPage}, "页面信息")
           ), 
           React.createElement("div", {className: "col-md-1"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.newQuestion}, "添加问题")
