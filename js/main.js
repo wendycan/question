@@ -74,7 +74,7 @@ jQuery(function($) {
             <input type="text" className="form-control" placeholder="Title" ref="title" id="f-title" />
           </div>
           <div className="form-group">
-            <label htmlFor="f-option">选项</label>
+            <label htmlFor="f-option">选项<mark>添加后，点击选项选择正确答案。</mark></label>
             <OptionForm onOptionSubmit={this.handleOptionSubmit}/>
             <Options options={this.state.options}></Options>
           </div>

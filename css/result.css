@@ -7,7 +7,7 @@ body {
   margin: 50px auto;
 }
 .bm_questionList li label{
-  padding: 5px;
+  padding: 6px;
   display: inline-block;
   width: 95%;
 }
@@ -16,8 +16,9 @@ body {
 }
 .bm_optionList li {
   border: solid 1px #aaa;
+  border-radius: 3px;
   padding-left: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 .bm_optionList li.right {
   background-color: #0de53b;

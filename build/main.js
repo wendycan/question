@@ -74,7 +74,7 @@ jQuery(function($) {
             React.createElement("input", {type: "text", className: "form-control", placeholder: "Title", ref: "title", id: "f-title"})
           ), 
           React.createElement("div", {className: "form-group"}, 
-            React.createElement("label", {htmlFor: "f-option"}, "选项"), 
+            React.createElement("label", {htmlFor: "f-option"}, "选项", React.createElement("mark", null, "添加后，点击选项选择正确答案。")), 
             React.createElement(OptionForm, {onOptionSubmit: this.handleOptionSubmit}), 
             React.createElement(Options, {options: this.state.options})
           ), 
