@@ -4,7 +4,9 @@ jQuery(function($) {
         pow = num / 26 | 0,
         out = mod ? String.fromCharCode(64 + mod) : (--pow, 'Z');
     return pow ? toLetters(pow) + out : out;
-  }
+  };
+  var jsUrl = 'http://localhost:8000/js/result.js';
+  var cssUrl = 'http://localhost:8000/css/result.css'
   var Question = React.createClass({
     render: function() {
       return (
@@ -154,7 +156,7 @@ jQuery(function($) {
         return (
           <li key={index} style={{listStyle: 'none'}} className="bm_question">
             <h4>{ question.title }</h4>
-            <ul className="bm_optionList">{optionsNodes}</ul>
+            <ol className="bm_optionList">{optionsNodes}</ol>
             <div style={{ display: 'none' }} className="bm_result">
               <div className='right' ><h3>正确</h3><p>{ question.answer.desc }</p></div>
               <div className='error' ><h3>错误</h3><p>{ question.answer.desc }</p></div>
@@ -170,7 +172,6 @@ jQuery(function($) {
     }
   });
   var ContentBox = React.createClass({
-    jsUrl: 'http://localhost:8000/js/result.js',
     getInitialState: function() {
       return {data: []};
     },
@@ -189,7 +190,8 @@ jQuery(function($) {
     generateHTML: function() {
       if (this.state.data.length <= 0) {return};
       var text = React.renderToStaticMarkup(<Result data={this.state.data}/>);
-      text += '<script type="text/javascript" src="' + this.jsUrl + '"></script>';
+      text += '<link rel="stylesheet" type="text/css" href="' + cssUrl + '">';
+      text += '<script type="text/javascript" src="' + jsUrl + '"></script>';
       $('#result-text textarea').val(text);
       $('#result-text').css('display', 'block');
     },

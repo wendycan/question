@@ -4,7 +4,9 @@ jQuery(function($) {
         pow = num / 26 | 0,
         out = mod ? String.fromCharCode(64 + mod) : (--pow, 'Z');
     return pow ? toLetters(pow) + out : out;
-  }
+  };
+  var jsUrl = 'http://localhost:8000/js/result.js';
+  var cssUrl = 'http://localhost:8000/css/result.css'
   var Question = React.createClass({displayName: "Question",
     render: function() {
       return (
@@ -154,7 +156,7 @@ jQuery(function($) {
         return (
           React.createElement("li", {key: index, style: {listStyle: 'none'}, className: "bm_question"}, 
             React.createElement("h4", null,  question.title), 
-            React.createElement("ul", {className: "bm_optionList"}, optionsNodes), 
+            React.createElement("ol", {className: "bm_optionList"}, optionsNodes), 
             React.createElement("div", {style: { display: 'none'}, className: "bm_result"}, 
               React.createElement("div", {className: "right"}, React.createElement("h3", null, "正确"), React.createElement("p", null,  question.answer.desc)), 
               React.createElement("div", {className: "error"}, React.createElement("h3", null, "错误"), React.createElement("p", null,  question.answer.desc))
@@ -170,7 +172,6 @@ jQuery(function($) {
     }
   });
   var ContentBox = React.createClass({displayName: "ContentBox",
-    jsUrl: 'http://localhost:8000/js/result.js',
     getInitialState: function() {
       return {data: []};
     },
@@ -189,7 +190,8 @@ jQuery(function($) {
     generateHTML: function() {
       if (this.state.data.length <= 0) {return};
       var text = React.renderToStaticMarkup(React.createElement(Result, {data: this.state.data}));
-      text += '<script type="text/javascript" src="' + this.jsUrl + '"></script>';
+      text += '<link rel="stylesheet" type="text/css" href="' + cssUrl + '">';
+      text += '<script type="text/javascript" src="' + jsUrl + '"></script>';
       $('#result-text textarea').val(text);
       $('#result-text').css('display', 'block');
     },
