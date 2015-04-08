@@ -46,7 +46,7 @@ var QuestionForm = React.createClass({
       desc: React.findDOMNode(this.refs.answer).value.trim(),
       index: $('.optionsList .active').data('id')
     };
-    if (!title || !answer) {
+    if (!title || !answer || answer.index === undefined) {
       return;
     }
 
@@ -131,7 +131,39 @@ var Questions = React.createClass({
     );
   }
 });
+var Result = React.createClass({
+  render: function() {
+    var questionNodes = this.props.data.map(function(question, index) {
+      var _index = index;
+      var optionsNodes = question.options.map(function(option, index) {
+        var isTrue = index === question.answer.index? true:false;
+        return (
+          <li data-right={isTrue} key={index} style={{listStyle: 'none'}}>
+          <input type="radio" name={_index} value={index}/>
+          <label>{option}</label>
+          </li>
+        )
+      });
+      return (
+        <li key={index} style={{listStyle: 'none'}} className="bm_question">
+          <h4>{ question.title }</h4>
+          <ul className="bm_optionList">{optionsNodes}</ul>
+          <div style={{ display: 'none' }} className="bm_result">
+            <div className='right' ><h3>正确</h3><p>{ question.answer.desc }</p></div>
+            <div className='error' ><h3>错误</h3><p>{ question.answer.desc }</p></div>
+          </div>
+        </li>
+      );
+    });
+    return (
+      <ul className="bm_questionList" style={{padding: 0}}>
+        {questionNodes}
+      </ul>
+    );
+  }
+});
 var ContentBox = React.createClass({
+  jsUrl: 'http://localhost:8000/js/result.js',
   getInitialState: function() {
     return {data: []};
   },
@@ -147,7 +179,11 @@ var ContentBox = React.createClass({
     );
   },
   generateHTML: function() {
-    console.log(this.state.data);
+    React.render(<Result data={this.state.data}/>,document.getElementById('result'));
+    var text = $('#result').html();
+    text += '<script type="text/javascript" src="' + this.jsUrl + '"></script>';
+    $('#result-text textarea').val(text);
+    $('#result-text').css('display', 'block');
   },
   render: function() {
     return (<div className="question-box">

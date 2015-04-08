@@ -46,7 +46,7 @@ var QuestionForm = React.createClass({displayName: "QuestionForm",
       desc: React.findDOMNode(this.refs.answer).value.trim(),
       index: $('.optionsList .active').data('id')
     };
-    if (!title || !answer) {
+    if (!title || !answer || answer.index === undefined) {
       return;
     }
 
@@ -131,7 +131,39 @@ var Questions = React.createClass({displayName: "Questions",
     );
   }
 });
+var Result = React.createClass({displayName: "Result",
+  render: function() {
+    var questionNodes = this.props.data.map(function(question, index) {
+      var _index = index;
+      var optionsNodes = question.options.map(function(option, index) {
+        var isTrue = index === question.answer.index? true:false;
+        return (
+          React.createElement("li", {"data-right": isTrue, key: index, style: {listStyle: 'none'}}, 
+          React.createElement("input", {type: "radio", name: _index, value: index}), 
+          React.createElement("label", null, option)
+          )
+        )
+      });
+      return (
+        React.createElement("li", {key: index, style: {listStyle: 'none'}, className: "bm_question"}, 
+          React.createElement("h4", null,  question.title), 
+          React.createElement("ul", {className: "bm_optionList"}, optionsNodes), 
+          React.createElement("div", {style: { display: 'none'}, className: "bm_result"}, 
+            React.createElement("div", {className: "right"}, React.createElement("h3", null, "正确"), React.createElement("p", null,  question.answer.desc)), 
+            React.createElement("div", {className: "error"}, React.createElement("h3", null, "错误"), React.createElement("p", null,  question.answer.desc))
+          )
+        )
+      );
+    });
+    return (
+      React.createElement("ul", {className: "bm_questionList", style: {padding: 0}}, 
+        questionNodes
+      )
+    );
+  }
+});
 var ContentBox = React.createClass({displayName: "ContentBox",
+  jsUrl: 'http://localhost:8000/js/result.js',
   getInitialState: function() {
     return {data: []};
   },
@@ -147,7 +179,11 @@ var ContentBox = React.createClass({displayName: "ContentBox",
     );
   },
   generateHTML: function() {
-    console.log(this.state.data);
+    React.render(React.createElement(Result, {data: this.state.data}),document.getElementById('result'));
+    var text = $('#result').html();
+    text += '<script type="text/javascript" src="' + this.jsUrl + '"></script>';
+    $('#result-text textarea').val(text);
+    $('#result-text').css('display', 'block');
   },
   render: function() {
     return (React.createElement("div", {className: "question-box"}, 
