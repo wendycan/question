@@ -30,14 +30,15 @@ body {
   border: solid 1px #aaa;
   border-radius: 4px;
   padding: 10px;
+  margin-bottom: 10px;
   background-color: #fafafa;
 }
 .bm_question {
-  border-bottom: solid 1px #aaa;
   padding-bottom: 20px;
 }
-.bm_question:last-child {
-  border: none;
+.bm_question img {
+  max-height: 350px;
+  margin-bottom: 10px;
 }
 .bm_result {
   border: solid 1px #aaa;

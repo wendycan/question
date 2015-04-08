@@ -11,7 +11,8 @@ jQuery(function($) {
     render: function() {
       return (
         <div className="question">
-          <h4>问题{this.props.index}：{ this.props.title }</h4>
+          <h4>问题{this.props.index}：{this.props.title}</h4>
+          <img src={this.props.image_url}/>
           <OptionsList options={this.props.options} selected={this.props.answer.index} ></OptionsList>
           <p> { this.props.answer.desc} </p>
         </div>
@@ -46,6 +47,7 @@ jQuery(function($) {
     handleSubmit: function(e) {
       e.preventDefault();
       var title = React.findDOMNode(this.refs.title).value.trim();
+      var url = React.findDOMNode(this.refs.url).value.trim();
       var answer = {
         desc: React.findDOMNode(this.refs.answer).value.trim(),
         index: $('.optionsList .active').data('id')
@@ -54,7 +56,7 @@ jQuery(function($) {
         return;
       }
 
-      this.props.onQuestionSubmit({title: title, answer: answer, options: this.state.options});
+      this.props.onQuestionSubmit({title: title, answer: answer, options: this.state.options, image_url: url});
       $('#question-form').empty();
     },
     cancelAdd: function(e) {
@@ -72,6 +74,10 @@ jQuery(function($) {
           <div className="form-group">
             <label htmlFor="f-title">问题</label>
             <input type="text" className="form-control" placeholder="Title" ref="title" id="f-title" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="f-url">图片地址</label>
+            <input type="text" className="form-control" placeholder="URL" ref="url" id="f-url" />
           </div>
           <div className="form-group">
             <label htmlFor="f-option">选项<mark>添加后，点击选项选择正确答案。</mark></label>
@@ -129,7 +135,7 @@ jQuery(function($) {
     render: function() {
       var questionNodes = this.props.data.map(function(question, index) {
         return (
-          <Question title={question.title} options={question.options} answer={question.answer} index={index + 1} key={index}>
+          <Question title={question.title} image_url={question.image_url} options={question.options} answer={question.answer} index={index + 1} key={index}>
           </Question>
         );
       });
@@ -164,9 +170,10 @@ jQuery(function($) {
           )
         });
         return (
-          <li key={index} style={{listStyle: 'none'}} className="bm_question">
+          <li key={index} className="bm_question">
             <h4>{ question.title }</h4>
-            <ol className="bm_optionList">{optionsNodes}</ol>
+            <img src={question.image_url} />
+            <ul className="bm_optionList">{optionsNodes}</ul>
             <div style={{ display: 'none' }} className="bm_result">
               <div className='right' ><h3>正确</h3><p>{ question.answer.desc }</p></div>
               <div className='error' ><h3>错误</h3><p>{ question.answer.desc }</p></div>
@@ -178,9 +185,9 @@ jQuery(function($) {
         <div className="bm_page">
           <h3>{this.props.meta.title}</h3>
           <p>{this.props.meta.desc}</p>
-          <ul className="bm_questionList" style={{padding: 0}}>
+          <ol className="bm_questionList" style={{padding: 0}}>
             {questionNodes}
-          </ul>
+          </ol>
         </div>
       );
     }
@@ -222,27 +229,47 @@ jQuery(function($) {
       var questions = this.state.data;
       questions.push(question);
       this.setState({data: questions});
+      this.previewQuestion();
     },
     handlePageSubmit: function(meta) {
       this.setState({meta: meta})
       $('#meta-form').empty();
+      this.previewQuestion();
     },
     newQuestion: function(){
       $('#meta-form').empty();
       $('#result-text').hide();
+      $('#question-form').show()
+      this.hidePreviewQuestion();
       React.render(
         <QuestionForm onQuestionSubmit={this.handleQuestionSubmit}/>,
         document.getElementById('question-form')
       );
     },
     editPage: function() {
+      $('#result-text').hide();
       $('#question-form').empty();
+      $('#meta-form').show();
+      this.hidePreviewQuestion();
       React.render(
         <PageForm onPageSubmit={this.handlePageSubmit} data={this.state.meta}/>,
         document.getElementById('meta-form')
       );
     },
+    hidePreviewQuestion: function() {
+      $('#questionlist').hide();
+    },
+    previewQuestion: function() {
+      $('#question-form').hide();
+      $('#meta-form').hide();
+      $('#result-text').hide();
+      $('#questionlist').show();
+    },
     generateHTML: function() {
+      $('#result-text').show();
+      $('#questionlist').hide();
+      $('#question-form').empty();
+      $('#meta-form').empty();
       if (this.state.data.length <= 0) {return};
       var text = React.renderToStaticMarkup(<Result data={this.state.data} meta={this.state.meta}/>);
       text += '<link rel="stylesheet" type="text/css" href="' + cssUrl + '">';
@@ -254,10 +281,13 @@ jQuery(function($) {
       return (<div className="question-box">
         <div className="row top-buttons">
           <div className="col-md-1">
+            <div className="btn btn-default" onClick={this.editPage}>编辑页面</div>
+          </div>
+          <div className="col-md-1">
             <div className="btn btn-default" onClick={this.newQuestion}>添加问题</div>
           </div>
           <div className="col-md-1">
-            <div className="btn btn-default" onClick={this.editPage}>编辑页面</div>
+            <div className="btn btn-default" onClick={this.previewQuestion}>预览</div>
           </div>
           <div className="col-md-1">
             <div className="btn btn-default" onClick={this.generateHTML}>生成 HTML</div>
@@ -265,8 +295,10 @@ jQuery(function($) {
         </div>
         <div id="question-form"></div>
         <div id="meta-form"></div>
-        <PageMetas data={this.state.meta} />
-        <Questions data={this.state.data} />
+        <div id="questionlist">
+          <PageMetas data={this.state.meta} />
+          <Questions data={this.state.data} />
+        </div>
       </div>
       );
     }

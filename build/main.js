@@ -11,7 +11,8 @@ jQuery(function($) {
     render: function() {
       return (
         React.createElement("div", {className: "question"}, 
-          React.createElement("h4", null, "问题", this.props.index, "：",  this.props.title), 
+          React.createElement("h4", null, "问题", this.props.index, "：", this.props.title), 
+          React.createElement("img", {src: this.props.image_url}), 
           React.createElement(OptionsList, {options: this.props.options, selected: this.props.answer.index}), 
           React.createElement("p", null, " ",  this.props.answer.desc, " ")
         )
@@ -46,6 +47,7 @@ jQuery(function($) {
     handleSubmit: function(e) {
       e.preventDefault();
       var title = React.findDOMNode(this.refs.title).value.trim();
+      var url = React.findDOMNode(this.refs.url).value.trim();
       var answer = {
         desc: React.findDOMNode(this.refs.answer).value.trim(),
         index: $('.optionsList .active').data('id')
@@ -54,7 +56,7 @@ jQuery(function($) {
         return;
       }
 
-      this.props.onQuestionSubmit({title: title, answer: answer, options: this.state.options});
+      this.props.onQuestionSubmit({title: title, answer: answer, options: this.state.options, image_url: url});
       $('#question-form').empty();
     },
     cancelAdd: function(e) {
@@ -72,6 +74,10 @@ jQuery(function($) {
           React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "f-title"}, "问题"), 
             React.createElement("input", {type: "text", className: "form-control", placeholder: "Title", ref: "title", id: "f-title"})
+          ), 
+          React.createElement("div", {className: "form-group"}, 
+            React.createElement("label", {htmlFor: "f-url"}, "图片地址"), 
+            React.createElement("input", {type: "text", className: "form-control", placeholder: "URL", ref: "url", id: "f-url"})
           ), 
           React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "f-option"}, "选项", React.createElement("mark", null, "添加后，点击选项选择正确答案。")), 
@@ -129,7 +135,7 @@ jQuery(function($) {
     render: function() {
       var questionNodes = this.props.data.map(function(question, index) {
         return (
-          React.createElement(Question, {title: question.title, options: question.options, answer: question.answer, index: index + 1, key: index}
+          React.createElement(Question, {title: question.title, image_url: question.image_url, options: question.options, answer: question.answer, index: index + 1, key: index}
           )
         );
       });
@@ -164,9 +170,10 @@ jQuery(function($) {
           )
         });
         return (
-          React.createElement("li", {key: index, style: {listStyle: 'none'}, className: "bm_question"}, 
+          React.createElement("li", {key: index, className: "bm_question"}, 
             React.createElement("h4", null,  question.title), 
-            React.createElement("ol", {className: "bm_optionList"}, optionsNodes), 
+            React.createElement("img", {src: question.image_url}), 
+            React.createElement("ul", {className: "bm_optionList"}, optionsNodes), 
             React.createElement("div", {style: { display: 'none'}, className: "bm_result"}, 
               React.createElement("div", {className: "right"}, React.createElement("h3", null, "正确"), React.createElement("p", null,  question.answer.desc)), 
               React.createElement("div", {className: "error"}, React.createElement("h3", null, "错误"), React.createElement("p", null,  question.answer.desc))
@@ -178,7 +185,7 @@ jQuery(function($) {
         React.createElement("div", {className: "bm_page"}, 
           React.createElement("h3", null, this.props.meta.title), 
           React.createElement("p", null, this.props.meta.desc), 
-          React.createElement("ul", {className: "bm_questionList", style: {padding: 0}}, 
+          React.createElement("ol", {className: "bm_questionList", style: {padding: 0}}, 
             questionNodes
           )
         )
@@ -222,27 +229,47 @@ jQuery(function($) {
       var questions = this.state.data;
       questions.push(question);
       this.setState({data: questions});
+      this.previewQuestion();
     },
     handlePageSubmit: function(meta) {
       this.setState({meta: meta})
       $('#meta-form').empty();
+      this.previewQuestion();
     },
     newQuestion: function(){
       $('#meta-form').empty();
       $('#result-text').hide();
+      $('#question-form').show()
+      this.hidePreviewQuestion();
       React.render(
         React.createElement(QuestionForm, {onQuestionSubmit: this.handleQuestionSubmit}),
         document.getElementById('question-form')
       );
     },
     editPage: function() {
+      $('#result-text').hide();
       $('#question-form').empty();
+      $('#meta-form').show();
+      this.hidePreviewQuestion();
       React.render(
         React.createElement(PageForm, {onPageSubmit: this.handlePageSubmit, data: this.state.meta}),
         document.getElementById('meta-form')
       );
     },
+    hidePreviewQuestion: function() {
+      $('#questionlist').hide();
+    },
+    previewQuestion: function() {
+      $('#question-form').hide();
+      $('#meta-form').hide();
+      $('#result-text').hide();
+      $('#questionlist').show();
+    },
     generateHTML: function() {
+      $('#result-text').show();
+      $('#questionlist').hide();
+      $('#question-form').empty();
+      $('#meta-form').empty();
       if (this.state.data.length <= 0) {return};
       var text = React.renderToStaticMarkup(React.createElement(Result, {data: this.state.data, meta: this.state.meta}));
       text += '<link rel="stylesheet" type="text/css" href="' + cssUrl + '">';
@@ -254,10 +281,13 @@ jQuery(function($) {
       return (React.createElement("div", {className: "question-box"}, 
         React.createElement("div", {className: "row top-buttons"}, 
           React.createElement("div", {className: "col-md-1"}, 
+            React.createElement("div", {className: "btn btn-default", onClick: this.editPage}, "编辑页面")
+          ), 
+          React.createElement("div", {className: "col-md-1"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.newQuestion}, "添加问题")
           ), 
           React.createElement("div", {className: "col-md-1"}, 
-            React.createElement("div", {className: "btn btn-default", onClick: this.editPage}, "编辑页面")
+            React.createElement("div", {className: "btn btn-default", onClick: this.previewQuestion}, "预览")
           ), 
           React.createElement("div", {className: "col-md-1"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.generateHTML}, "生成 HTML")
@@ -265,8 +295,10 @@ jQuery(function($) {
         ), 
         React.createElement("div", {id: "question-form"}), 
         React.createElement("div", {id: "meta-form"}), 
-        React.createElement(PageMetas, {data: this.state.meta}), 
-        React.createElement(Questions, {data: this.state.data})
+        React.createElement("div", {id: "questionlist"}, 
+          React.createElement(PageMetas, {data: this.state.meta}), 
+          React.createElement(Questions, {data: this.state.data})
+        )
       )
       );
     }
