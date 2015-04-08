@@ -281,16 +281,16 @@ jQuery(function($) {
     render: function() {
       return (React.createElement("div", {className: "question-box"}, 
         React.createElement("div", {className: "row top-buttons"}, 
-          React.createElement("div", {className: "col-md-1"}, 
+          React.createElement("div", {className: "col-md-1 col-xs-3"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.editPage}, "页面信息")
           ), 
-          React.createElement("div", {className: "col-md-1"}, 
+          React.createElement("div", {className: "col-md-1 col-xs-3"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.newQuestion}, "添加问题")
           ), 
-          React.createElement("div", {className: "col-md-1"}, 
+          React.createElement("div", {className: "col-md-1 col-xs-3"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.previewQuestion}, "预览")
           ), 
-          React.createElement("div", {className: "col-md-1"}, 
+          React.createElement("div", {className: "col-md-1 col-xs-3"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.generateHTML}, "生成 HTML")
           )
         ), 
