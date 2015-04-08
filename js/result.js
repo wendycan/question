@@ -27,38 +27,4 @@ window.addEventListener('DOMContentLoaded', function(){
         result.style.display = 'block';
     });
   });
-
-  // input.addEventListener('click', function(e){
-  //   console.log(e);
-  //   var checked = $$('li.on', form)
-  //   if(checked.length !== questions.length) return alert('这位客官请回答完先！')
-
-  //   var point = 0
-  //   var result = ''
-  //   var resultArr = $.toArray(resultLists)
-  //   checked = $$('input:checked', form)
-  //   if(questions.length > 1) {
-  //     $.toArray(checked).forEach(function(radio){
-  //       point += Number(radio.value)
-  //     })
-  //     result = resultArr.filter(function(li){
-  //       var max = Number(li.getAttribute('max'))
-  //       var min = Number(li.getAttribute('min'))
-  //       return point >= min && point <= max
-  //     })[0].innerText
-  //   } else {
-  //     point = Number(checked[0].value)
-  //     result = resultArr.filter(function(li){
-  //       return Number(li.getAttribute('rel')) === point
-  //     })[0].innerText
-  //   }
-  //   content.innerText = result
-
-  //   resultDiv.style.display = 'block'
-  //   submit.style.background = '#ccc'
-  //   submit.addEventListener('click', function(e){
-  //     e.preventDefault()
-  //   })
-  // })
-
 }, false)

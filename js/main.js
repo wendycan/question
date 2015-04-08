@@ -8,7 +8,7 @@ var Question = React.createClass({
   render: function() {
     return (
       <div className="question">
-        <p>{ this.props.title }</p>
+        <h4>{ this.props.title }</h4>
         <OptionsList options={this.props.options} selected={this.props.answer.index} ></OptionsList>
         <p> { this.props.answer.desc} </p>
       </div>
@@ -53,6 +53,10 @@ var QuestionForm = React.createClass({
     this.props.onQuestionSubmit({title: title, answer: answer, options: this.state.options});
     $('#question-form').empty();
   },
+  cancelAdd: function(e) {
+    e.preventDefault();
+    $('#question-form').empty();
+  },
   handleOptionSubmit: function(option) {
     var options = this.state.options;
     options.push(option);
@@ -75,6 +79,7 @@ var QuestionForm = React.createClass({
           <textarea className="form-control" rows="3" placeholder="Answer" ref="answer"></textarea>
         </div>
         <button type="submit" className="btn btn-default">添加</button>
+        <button className="btn btn-default" onClick={this.cancelAdd}>取消</button>
       </form>
     );
   }
@@ -126,6 +131,7 @@ var Questions = React.createClass({
     });
     return (
       <div className="questionList">
+        <h4>添加的问题</h4>
         {questionNodes}
       </div>
     );
@@ -173,12 +179,14 @@ var ContentBox = React.createClass({
     this.setState({data: questions});
   },
   newQuestion: function(){
+    $('#result-text').hide();
     React.render(
       <QuestionForm onQuestionSubmit={this.handleQuestionSubmit}/>,
       document.getElementById('question-form')
     );
   },
   generateHTML: function() {
+    if (this.state.data.length <= 0) {return};
     React.render(<Result data={this.state.data}/>,document.getElementById('result'));
     var text = $('#result').html();
     text += '<script type="text/javascript" src="' + this.jsUrl + '"></script>';
@@ -187,7 +195,7 @@ var ContentBox = React.createClass({
   },
   render: function() {
     return (<div className="question-box">
-      <div className="row">
+      <div className="row top-buttons">
         <div className="col-md-1">
           <div className="btn btn-default" onClick={this.newQuestion}>添加问题</div>
         </div>

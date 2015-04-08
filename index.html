@@ -6,6 +6,9 @@
   <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="/css/main.css">
   <style>
+    .top-buttons {
+      margin-bottom: 20px;
+    }
     .optionsList {
       margin-top: 10px;
     }
@@ -17,6 +20,15 @@
     .active {
       background-color: #e6ffd6;
     }
+    .question {
+      border-bottom: solid 1px #aaa;
+    }
+    .question:last-child {
+      border: none;
+    }
+    #result-text {
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
@@ -25,6 +37,7 @@
   <div id="content"></div>
   <div id="result" style="display:none;"></div>
   <div id="result-text" style="display:none;">
+    <h4>生成的 HTML</h4>
     <textarea name="result" rows="15" class="form-control"></textarea>
   </div>
 </div>

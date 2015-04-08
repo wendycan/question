@@ -8,7 +8,7 @@ var Question = React.createClass({displayName: "Question",
   render: function() {
     return (
       React.createElement("div", {className: "question"}, 
-        React.createElement("p", null,  this.props.title), 
+        React.createElement("h4", null,  this.props.title), 
         React.createElement(OptionsList, {options: this.props.options, selected: this.props.answer.index}), 
         React.createElement("p", null, " ",  this.props.answer.desc, " ")
       )
@@ -53,6 +53,10 @@ var QuestionForm = React.createClass({displayName: "QuestionForm",
     this.props.onQuestionSubmit({title: title, answer: answer, options: this.state.options});
     $('#question-form').empty();
   },
+  cancelAdd: function(e) {
+    e.preventDefault();
+    $('#question-form').empty();
+  },
   handleOptionSubmit: function(option) {
     var options = this.state.options;
     options.push(option);
@@ -74,7 +78,8 @@ var QuestionForm = React.createClass({displayName: "QuestionForm",
           React.createElement("label", null, "答案"), 
           React.createElement("textarea", {className: "form-control", rows: "3", placeholder: "Answer", ref: "answer"})
         ), 
-        React.createElement("button", {type: "submit", className: "btn btn-default"}, "添加")
+        React.createElement("button", {type: "submit", className: "btn btn-default"}, "添加"), 
+        React.createElement("button", {className: "btn btn-default", onClick: this.cancelAdd}, "取消")
       )
     );
   }
@@ -126,6 +131,7 @@ var Questions = React.createClass({displayName: "Questions",
     });
     return (
       React.createElement("div", {className: "questionList"}, 
+        React.createElement("h4", null, "添加的问题"), 
         questionNodes
       )
     );
@@ -173,12 +179,14 @@ var ContentBox = React.createClass({displayName: "ContentBox",
     this.setState({data: questions});
   },
   newQuestion: function(){
+    $('#result-text').hide();
     React.render(
       React.createElement(QuestionForm, {onQuestionSubmit: this.handleQuestionSubmit}),
       document.getElementById('question-form')
     );
   },
   generateHTML: function() {
+    if (this.state.data.length <= 0) {return};
     React.render(React.createElement(Result, {data: this.state.data}),document.getElementById('result'));
     var text = $('#result').html();
     text += '<script type="text/javascript" src="' + this.jsUrl + '"></script>';
@@ -187,7 +195,7 @@ var ContentBox = React.createClass({displayName: "ContentBox",
   },
   render: function() {
     return (React.createElement("div", {className: "question-box"}, 
-      React.createElement("div", {className: "row"}, 
+      React.createElement("div", {className: "row top-buttons"}, 
         React.createElement("div", {className: "col-md-1"}, 
           React.createElement("div", {className: "btn btn-default", onClick: this.newQuestion}, "添加问题")
         ), 
