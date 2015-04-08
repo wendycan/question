@@ -188,8 +188,7 @@ jQuery(function($) {
     },
     generateHTML: function() {
       if (this.state.data.length <= 0) {return};
-      React.render(React.createElement(Result, {data: this.state.data}),document.getElementById('result'));
-      var text = $('#result').html();
+      var text = React.renderToStaticMarkup(React.createElement(Result, {data: this.state.data}));
       text += '<script type="text/javascript" src="' + this.jsUrl + '"></script>';
       $('#result-text textarea').val(text);
       $('#result-text').css('display', 'block');
