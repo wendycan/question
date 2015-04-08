@@ -6,11 +6,24 @@ body {
   max-width: 960px;
   margin: 50px auto;
 }
+.bm_questionList li label{
+  padding: 5px;
+  display: inline-block;
+  width: 95%;
+}
+.bm_optionList {
+  padding: 0;
+}
+.bm_optionList li {
+  border: solid 1px #aaa;
+  padding-left: 5px;
+  margin-bottom: 5px;
+}
 .bm_optionList li.right {
-  border: solid 1px green;
+  background-color: #0de53b;
 }
 .bm_optionList li.error {
-  border: solid 1px red;
+  background-color: #ff3334;
 }
 .bm_question h4 {
   border: solid 1px #aaa;

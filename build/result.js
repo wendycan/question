@@ -17,10 +17,15 @@ window.addEventListener('DOMContentLoaded', function(){
       input.addEventListener('click', function(e){
         var target_li = e.currentTarget.parentNode;
         var result = e.currentTarget.parentNode.parentNode.parentNode.querySelector('.bm_result');
+        $.toArray(target_li.parentNode.querySelectorAll('input')).forEach(function(el) {
+          el.disabled = "disabled";
+        });
         if(target_li.getAttribute('data-right') == 'true'){
+          target_li.className += 'right';
           result.querySelector('.right').style.display = 'block';
           result.querySelector('.error').style.display = 'none';
         } else {
+          target_li.className += 'error';
           result.querySelector('.right').style.display = 'none';
           result.querySelector('.error').style.display = 'block';
         }
