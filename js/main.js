@@ -140,6 +140,16 @@ jQuery(function($) {
       );
     }
   });
+  var PageMetas = React.createClass({
+    render: function() {
+      return (
+        <div>
+          <h3>{this.props.data.title}</h3>
+          <p>{this.props.data.desc}</p>
+        </div>
+      );
+    }
+  });
   var Result = React.createClass({
     render: function() {
       var questionNodes = this.props.data.map(function(question, index) {
@@ -165,31 +175,76 @@ jQuery(function($) {
         );
       });
       return (
-        <ul className="bm_questionList" style={{padding: 0}}>
-          {questionNodes}
-        </ul>
+        <div className="bm_page">
+          <h3>{this.props.meta.title}</h3>
+          <p>{this.props.meta.desc}</p>
+          <ul className="bm_questionList" style={{padding: 0}}>
+            {questionNodes}
+          </ul>
+        </div>
+      );
+    }
+  });
+  var PageForm = React.createClass({
+    handleSubmit: function(e){
+      e.preventDefault();
+      this.props.onPageSubmit({
+        title: React.findDOMNode(this.refs.title).value.trim(),
+        desc: React.findDOMNode(this.refs.desc).value.trim()
+      });
+    },
+    cancelUpdate: function(e) {
+      e.preventDefault();
+      $('#meta-form').empty();
+    },
+    render: function() {
+      return (
+        <form className="PageForm" onSubmit={this.handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="f-p-title">标题</label>
+            <input type="text" className="form-control" placeholder="Title" ref="title" id="f-p-title" defaultValue={this.props.data.title} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="f-p-desc">描述</label>
+            <textarea className="form-control" placeholder="Desc" row="5" ref="desc" id="f-p-desc" defaultValue={this.props.data.desc}/>
+          </div>
+          <button type="submit" className="btn btn-default">更新</button>
+          <button id="cancal-update-meta" className="btn btn-default" onClick={this.cancelUpdate}>取消</button>
+        </form>
       );
     }
   });
   var ContentBox = React.createClass({
     getInitialState: function() {
-      return {data: []};
+      return {data: [], meta: {}};
     },
-    handleQuestionSubmit: function (question) {
+    handleQuestionSubmit: function(question) {
       var questions = this.state.data;
       questions.push(question);
       this.setState({data: questions});
     },
+    handlePageSubmit: function(meta) {
+      this.setState({meta: meta})
+      $('#meta-form').empty();
+    },
     newQuestion: function(){
+      $('#meta-form').empty();
       $('#result-text').hide();
       React.render(
         <QuestionForm onQuestionSubmit={this.handleQuestionSubmit}/>,
         document.getElementById('question-form')
       );
     },
+    editPage: function() {
+      $('#question-form').empty();
+      React.render(
+        <PageForm onPageSubmit={this.handlePageSubmit} data={this.state.meta}/>,
+        document.getElementById('meta-form')
+      );
+    },
     generateHTML: function() {
       if (this.state.data.length <= 0) {return};
-      var text = React.renderToStaticMarkup(<Result data={this.state.data}/>);
+      var text = React.renderToStaticMarkup(<Result data={this.state.data} meta={this.state.meta}/>);
       text += '<link rel="stylesheet" type="text/css" href="' + cssUrl + '">';
       text += '<script type="text/javascript" src="' + jsUrl + '"></script>';
       $('#result-text textarea').val(text);
@@ -202,10 +257,15 @@ jQuery(function($) {
             <div className="btn btn-default" onClick={this.newQuestion}>添加问题</div>
           </div>
           <div className="col-md-1">
+            <div className="btn btn-default" onClick={this.editPage}>编辑页面</div>
+          </div>
+          <div className="col-md-1">
             <div className="btn btn-default" onClick={this.generateHTML}>生成 HTML</div>
           </div>
         </div>
         <div id="question-form"></div>
+        <div id="meta-form"></div>
+        <PageMetas data={this.state.meta} />
         <Questions data={this.state.data} />
       </div>
       );

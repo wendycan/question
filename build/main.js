@@ -140,6 +140,16 @@ jQuery(function($) {
       );
     }
   });
+  var PageMetas = React.createClass({displayName: "PageMetas",
+    render: function() {
+      return (
+        React.createElement("div", null, 
+          React.createElement("h3", null, this.props.data.title), 
+          React.createElement("p", null, this.props.data.desc)
+        )
+      );
+    }
+  });
   var Result = React.createClass({displayName: "Result",
     render: function() {
       var questionNodes = this.props.data.map(function(question, index) {
@@ -165,31 +175,76 @@ jQuery(function($) {
         );
       });
       return (
-        React.createElement("ul", {className: "bm_questionList", style: {padding: 0}}, 
-          questionNodes
+        React.createElement("div", {className: "bm_page"}, 
+          React.createElement("h3", null, this.props.meta.title), 
+          React.createElement("p", null, this.props.meta.desc), 
+          React.createElement("ul", {className: "bm_questionList", style: {padding: 0}}, 
+            questionNodes
+          )
+        )
+      );
+    }
+  });
+  var PageForm = React.createClass({displayName: "PageForm",
+    handleSubmit: function(e){
+      e.preventDefault();
+      this.props.onPageSubmit({
+        title: React.findDOMNode(this.refs.title).value.trim(),
+        desc: React.findDOMNode(this.refs.desc).value.trim()
+      });
+    },
+    cancelUpdate: function(e) {
+      e.preventDefault();
+      $('#meta-form').empty();
+    },
+    render: function() {
+      return (
+        React.createElement("form", {className: "PageForm", onSubmit: this.handleSubmit}, 
+          React.createElement("div", {className: "form-group"}, 
+            React.createElement("label", {htmlFor: "f-p-title"}, "标题"), 
+            React.createElement("input", {type: "text", className: "form-control", placeholder: "Title", ref: "title", id: "f-p-title", defaultValue: this.props.data.title})
+          ), 
+          React.createElement("div", {className: "form-group"}, 
+            React.createElement("label", {htmlFor: "f-p-desc"}, "描述"), 
+            React.createElement("textarea", {className: "form-control", placeholder: "Desc", row: "5", ref: "desc", id: "f-p-desc", defaultValue: this.props.data.desc})
+          ), 
+          React.createElement("button", {type: "submit", className: "btn btn-default"}, "更新"), 
+          React.createElement("button", {id: "cancal-update-meta", className: "btn btn-default", onClick: this.cancelUpdate}, "取消")
         )
       );
     }
   });
   var ContentBox = React.createClass({displayName: "ContentBox",
     getInitialState: function() {
-      return {data: []};
+      return {data: [], meta: {}};
     },
-    handleQuestionSubmit: function (question) {
+    handleQuestionSubmit: function(question) {
       var questions = this.state.data;
       questions.push(question);
       this.setState({data: questions});
     },
+    handlePageSubmit: function(meta) {
+      this.setState({meta: meta})
+      $('#meta-form').empty();
+    },
     newQuestion: function(){
+      $('#meta-form').empty();
       $('#result-text').hide();
       React.render(
         React.createElement(QuestionForm, {onQuestionSubmit: this.handleQuestionSubmit}),
         document.getElementById('question-form')
       );
     },
+    editPage: function() {
+      $('#question-form').empty();
+      React.render(
+        React.createElement(PageForm, {onPageSubmit: this.handlePageSubmit, data: this.state.meta}),
+        document.getElementById('meta-form')
+      );
+    },
     generateHTML: function() {
       if (this.state.data.length <= 0) {return};
-      var text = React.renderToStaticMarkup(React.createElement(Result, {data: this.state.data}));
+      var text = React.renderToStaticMarkup(React.createElement(Result, {data: this.state.data, meta: this.state.meta}));
       text += '<link rel="stylesheet" type="text/css" href="' + cssUrl + '">';
       text += '<script type="text/javascript" src="' + jsUrl + '"></script>';
       $('#result-text textarea').val(text);
@@ -202,10 +257,15 @@ jQuery(function($) {
             React.createElement("div", {className: "btn btn-default", onClick: this.newQuestion}, "添加问题")
           ), 
           React.createElement("div", {className: "col-md-1"}, 
+            React.createElement("div", {className: "btn btn-default", onClick: this.editPage}, "编辑页面")
+          ), 
+          React.createElement("div", {className: "col-md-1"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.generateHTML}, "生成 HTML")
           )
         ), 
         React.createElement("div", {id: "question-form"}), 
+        React.createElement("div", {id: "meta-form"}), 
+        React.createElement(PageMetas, {data: this.state.meta}), 
         React.createElement(Questions, {data: this.state.data})
       )
       );
