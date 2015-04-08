@@ -8,7 +8,7 @@ var Question = React.createClass({
   render: function() {
     return (
       <div className="question">
-        <h4>{ this.props.title }</h4>
+        <h4>问题{this.props.index}：{ this.props.title }</h4>
         <OptionsList options={this.props.options} selected={this.props.answer.index} ></OptionsList>
         <p> { this.props.answer.desc} </p>
       </div>
@@ -125,13 +125,12 @@ var Questions = React.createClass({
   render: function() {
     var questionNodes = this.props.data.map(function(question, index) {
       return (
-        <Question title={question.title} options={question.options} answer={question.answer} key={index}>
+        <Question title={question.title} options={question.options} answer={question.answer} index={index + 1} key={index}>
         </Question>
       );
     });
     return (
       <div className="questionList">
-        <h4>添加的问题</h4>
         {questionNodes}
       </div>
     );

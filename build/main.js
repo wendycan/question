@@ -8,7 +8,7 @@ var Question = React.createClass({displayName: "Question",
   render: function() {
     return (
       React.createElement("div", {className: "question"}, 
-        React.createElement("h4", null,  this.props.title), 
+        React.createElement("h4", null, "问题", this.props.index, "：",  this.props.title), 
         React.createElement(OptionsList, {options: this.props.options, selected: this.props.answer.index}), 
         React.createElement("p", null, " ",  this.props.answer.desc, " ")
       )
@@ -125,13 +125,12 @@ var Questions = React.createClass({displayName: "Questions",
   render: function() {
     var questionNodes = this.props.data.map(function(question, index) {
       return (
-        React.createElement(Question, {title: question.title, options: question.options, answer: question.answer, key: index}
+        React.createElement(Question, {title: question.title, options: question.options, answer: question.answer, index: index + 1, key: index}
         )
       );
     });
     return (
       React.createElement("div", {className: "questionList"}, 
-        React.createElement("h4", null, "添加的问题"), 
         questionNodes
       )
     );
