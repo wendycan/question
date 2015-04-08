@@ -271,9 +271,10 @@ jQuery(function($) {
       $('#question-form').empty();
       $('#meta-form').empty();
       if (this.state.data.length <= 0) {return};
-      var text = React.renderToStaticMarkup(<Result data={this.state.data} meta={this.state.meta}/>);
+      var text = '<html><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"></head><body>';
+      text += React.renderToStaticMarkup(<Result data={this.state.data} meta={this.state.meta}/>);
       text += '<link rel="stylesheet" type="text/css" href="' + cssUrl + '">';
-      text += '<script type="text/javascript" src="' + jsUrl + '"></script>';
+      text += '<script type="text/javascript" src="' + jsUrl + '"></script></body></html>';
       $('#result-text textarea').val(text);
       $('#result-text').css('display', 'block');
     },
