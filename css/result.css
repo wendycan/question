@@ -37,6 +37,7 @@
 .bm_question h4 {
   border-radius: 4px;
   margin-bottom: 10px;
+  margin-top: 0;
 }
 .bm_question {
   padding-bottom: 20px;
@@ -61,4 +62,5 @@
 .bm_result p {
   text-indent: 2em;
   padding: 5px;
+  margin: 0;
 }
