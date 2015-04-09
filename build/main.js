@@ -34,7 +34,7 @@ jQuery(function($) {
             React.createElement("input", {type: "text", className: "form-control", placeholder: "Option", ref: "option", id: "f-option"})
           ), 
           React.createElement("div", {className: "col-md-1"}, 
-            React.createElement("div", {className: "btn btn-default", id: "create-option", onClick: this.handleOptionSubmit}, "添加")
+            React.createElement("div", {className: "btn btn-info", id: "create-option", onClick: this.handleOptionSubmit}, "添加")
           )
         )
       );
@@ -85,10 +85,10 @@ jQuery(function($) {
             React.createElement(Options, {options: this.state.options})
           ), 
           React.createElement("div", {className: "form-group"}, 
-            React.createElement("label", {htmlFor: "f-answer"}, "答案"), 
+            React.createElement("label", {htmlFor: "f-answer"}, "答案描述"), 
             React.createElement("textarea", {className: "form-control", rows: "3", placeholder: "Answer", ref: "answer", id: "f-answer"})
           ), 
-          React.createElement("button", {type: "submit", className: "btn btn-default"}, "添加"), 
+          React.createElement("button", {type: "submit", className: "btn btn-primary"}, "保存"), 
           React.createElement("button", {className: "btn btn-default", onClick: this.cancelAdd}, "取消")
         )
       );
@@ -185,7 +185,7 @@ jQuery(function($) {
         React.createElement("div", {className: "bm_page"}, 
           React.createElement("h3", null, this.props.meta.title), 
           React.createElement("p", null, this.props.meta.desc), 
-          React.createElement("ol", {className: "bm_questionList", style: {padding: 0}}, 
+          React.createElement("ol", {className: "bm_questionList"}, 
             questionNodes
           )
         )
@@ -215,7 +215,7 @@ jQuery(function($) {
             React.createElement("label", {htmlFor: "f-p-desc"}, "描述"), 
             React.createElement("textarea", {className: "form-control", placeholder: "Desc", row: "5", ref: "desc", id: "f-p-desc", defaultValue: this.props.data.desc})
           ), 
-          React.createElement("button", {type: "submit", className: "btn btn-default"}, "更新"), 
+          React.createElement("button", {type: "submit", className: "btn btn-primary"}, "更新"), 
           React.createElement("button", {id: "cancal-update-meta", className: "btn btn-default", onClick: this.cancelUpdate}, "取消")
         )
       );
@@ -281,16 +281,16 @@ jQuery(function($) {
     render: function() {
       return (React.createElement("div", {className: "question-box"}, 
         React.createElement("div", {className: "row top-buttons"}, 
-          React.createElement("div", {className: "col-md-1 col-xs-3"}, 
+          React.createElement("div", {className: "col-md-2 col-xs-6"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.editPage}, "页面信息")
           ), 
-          React.createElement("div", {className: "col-md-1 col-xs-3"}, 
+          React.createElement("div", {className: "col-md-2 col-xs-6"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.newQuestion}, "添加问题")
           ), 
-          React.createElement("div", {className: "col-md-1 col-xs-3"}, 
+          React.createElement("div", {className: "col-md-2 col-xs-6"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.previewQuestion}, "预览")
           ), 
-          React.createElement("div", {className: "col-md-1 col-xs-3"}, 
+          React.createElement("div", {className: "col-md-2 col-xs-6"}, 
             React.createElement("div", {className: "btn btn-default", onClick: this.generateHTML}, "生成 HTML")
           )
         ), 
@@ -309,4 +309,8 @@ jQuery(function($) {
     React.createElement(ContentBox, null),
     document.getElementById('content')
   );
+  $('.question-box .top-buttons .btn').click(function(e) {
+    $('.question-box .top-buttons .btn').removeClass('active');
+    $(e.currentTarget).addClass('active');
+  })
 });

@@ -34,7 +34,7 @@ jQuery(function($) {
             <input type="text" className="form-control" placeholder="Option" ref="option" id="f-option" />
           </div>
           <div className="col-md-1">
-            <div className="btn btn-default" id="create-option" onClick={this.handleOptionSubmit}>添加</div>
+            <div className="btn btn-info" id="create-option" onClick={this.handleOptionSubmit}>添加</div>
           </div>
         </div>
       );
@@ -85,10 +85,10 @@ jQuery(function($) {
             <Options options={this.state.options}></Options>
           </div>
           <div className="form-group">
-            <label  htmlFor="f-answer">答案</label>
+            <label  htmlFor="f-answer">答案描述</label>
             <textarea className="form-control" rows="3" placeholder="Answer" ref="answer" id="f-answer"></textarea>
           </div>
-          <button type="submit" className="btn btn-default">添加</button>
+          <button type="submit" className="btn btn-primary">保存</button>
           <button className="btn btn-default" onClick={this.cancelAdd}>取消</button>
         </form>
       );
@@ -185,7 +185,7 @@ jQuery(function($) {
         <div className="bm_page">
           <h3>{this.props.meta.title}</h3>
           <p>{this.props.meta.desc}</p>
-          <ol className="bm_questionList" style={{padding: 0}}>
+          <ol className="bm_questionList">
             {questionNodes}
           </ol>
         </div>
@@ -215,7 +215,7 @@ jQuery(function($) {
             <label htmlFor="f-p-desc">描述</label>
             <textarea className="form-control" placeholder="Desc" row="5" ref="desc" id="f-p-desc" defaultValue={this.props.data.desc}/>
           </div>
-          <button type="submit" className="btn btn-default">更新</button>
+          <button type="submit" className="btn btn-primary">更新</button>
           <button id="cancal-update-meta" className="btn btn-default" onClick={this.cancelUpdate}>取消</button>
         </form>
       );
@@ -281,16 +281,16 @@ jQuery(function($) {
     render: function() {
       return (<div className="question-box">
         <div className="row top-buttons">
-          <div className="col-md-1">
+          <div className="col-md-2 col-xs-6">
             <div className="btn btn-default" onClick={this.editPage}>页面信息</div>
           </div>
-          <div className="col-md-1">
+          <div className="col-md-2 col-xs-6">
             <div className="btn btn-default" onClick={this.newQuestion}>添加问题</div>
           </div>
-          <div className="col-md-1">
+          <div className="col-md-2 col-xs-6">
             <div className="btn btn-default" onClick={this.previewQuestion}>预览</div>
           </div>
-          <div className="col-md-1">
+          <div className="col-md-2 col-xs-6">
             <div className="btn btn-default" onClick={this.generateHTML}>生成 HTML</div>
           </div>
         </div>
@@ -309,4 +309,8 @@ jQuery(function($) {
     <ContentBox />,
     document.getElementById('content')
   );
+  $('.question-box .top-buttons .btn').click(function(e) {
+    $('.question-box .top-buttons .btn').removeClass('active');
+    $(e.currentTarget).addClass('active');
+  })
 });
