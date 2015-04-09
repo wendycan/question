@@ -3,6 +3,13 @@
   margin-left: auto;
   margin-right: auto;
 }
+.bm_page h3 {
+  font-size: 1.4em;
+  margin-bottom: 0;
+}
+.bm_page > p {
+  margin-top: 5px;
+}
 .bm_questionList li label{
   padding: 6px;
   display: inline-block;
@@ -55,4 +62,3 @@
   text-indent: 2em;
   padding: 5px;
 }
-

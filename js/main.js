@@ -264,6 +264,8 @@ jQuery(function($) {
       $('#meta-form').hide();
       $('#result-text').hide();
       $('#questionlist').show();
+      $('.question-box .top-buttons .btn').removeClass('active');
+      $('.question-box .top-buttons .col-md-2:nth-child(3) .btn').addClass('active');
     },
     generateHTML: function() {
       $('#result-text').show();
@@ -312,5 +314,6 @@ jQuery(function($) {
   $('.question-box .top-buttons .btn').click(function(e) {
     $('.question-box .top-buttons .btn').removeClass('active');
     $(e.currentTarget).addClass('active');
-  })
+  });
+  $('.question-box .top-buttons .col-md-2:nth-child(1) .btn').click();
 });
