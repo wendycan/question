@@ -170,8 +170,8 @@ jQuery(function($) {
           )
         });
         return (
-          React.createElement("li", {key: index, className: "bm_question"}, 
-            React.createElement("h4", null,  question.title), 
+          React.createElement("li", {key: index, className: "bm_question", style: {listStyle: 'none'}}, 
+            React.createElement("h4", null,  index + 1 + '.  ' + question.title), 
             React.createElement("img", {src: question.image_url}), 
             React.createElement("ul", {className: "bm_optionList"}, optionsNodes), 
             React.createElement("div", {style: { display: 'none'}, className: "bm_result"}, 
@@ -185,7 +185,7 @@ jQuery(function($) {
         React.createElement("div", {className: "bm_page"}, 
           React.createElement("h3", null, this.props.meta.title), 
           React.createElement("p", null, this.props.meta.desc), 
-          React.createElement("ol", {className: "bm_questionList"}, 
+          React.createElement("ul", {className: "bm_questionList"}, 
             questionNodes
           )
         )

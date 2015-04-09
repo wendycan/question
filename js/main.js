@@ -170,8 +170,8 @@ jQuery(function($) {
           )
         });
         return (
-          <li key={index} className="bm_question">
-            <h4>{ question.title }</h4>
+          <li key={index} className="bm_question"  style={{listStyle: 'none'}}>
+            <h4>{ index + 1 + '.  ' + question.title }</h4>
             <img src={question.image_url} />
             <ul className="bm_optionList">{optionsNodes}</ul>
             <div style={{ display: 'none' }} className="bm_result">
@@ -185,9 +185,9 @@ jQuery(function($) {
         <div className="bm_page">
           <h3>{this.props.meta.title}</h3>
           <p>{this.props.meta.desc}</p>
-          <ol className="bm_questionList">
+          <ul className="bm_questionList">
             {questionNodes}
-          </ol>
+          </ul>
         </div>
       );
     }
