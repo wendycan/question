@@ -14,6 +14,7 @@ $ npm install react-tools -g
 ## Install
 
 ``` sh
+$ npm install
 $ bower install
 ```
 
@@ -24,5 +25,12 @@ $ jsx --watch js/ build/
 $ python -m SimpleHTTPServer
 ```
 
-Open browser, Input address `http://localhost:8000`.
+## Test
+
+### Requirement
+
+* phantomJS
+* casperJS
+
+Open browser, Type address `http://localhost:8000`.
 

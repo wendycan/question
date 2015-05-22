@@ -1,0 +1,22 @@
+{
+  "name": "question",
+  "version": "1.0.0",
+  "description": "## Require",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wendycan/question.git"
+  },
+  "author": "wendycan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wendycan/question/issues"
+  },
+  "homepage": "https://github.com/wendycan/question",
+  "dependencies": {
+    "sinon": "^1.14.1"
+  }
+}
